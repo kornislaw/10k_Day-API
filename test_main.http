@@ -28,8 +28,16 @@ Content-Type: application/json
 ### Get a single exercise
 GET http://127.0.0.1:8000/exercises/1
 
+### Update an exercise
+PUT http://127.0.0.1:8000/exercises/2
+Content-Type: application/json
 
-### Get a single exercise
+{
+  "name": "Exercise number {{$randomInt}}",
+  "description": "{{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}. {{$randomCatchPhrase}}."
+}
+
+### Delete an exercise
 DELETE http://127.0.0.1:8000/exercises/1
 
 > {%

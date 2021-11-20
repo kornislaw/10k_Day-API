@@ -30,16 +30,27 @@ def test_get_nonexisting_exe() -> None:
     assert 'not found' in result['detail']
 
 
-
 def test_post_exercise() -> None:
-    """Get a hello for someone"""
+    """Post a new exercise"""
     exe = {
-        "name": "Excercise number {{$randomInt}}",
+        "name": "Exercise number {{$randomInt}}",
         "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}"
     }
     response = client.post('/exercise', data=json.dumps(exe))
     result = response.json()
     assert response.status_code == 201
+    assert "name" in result
+
+
+def test_update_exercise() -> None:
+    """Update an exercise by ID"""
+    exe = {
+        "name": "Exercise number {{$randomInt}}",
+        "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}"
+    }
+    response = client.put('/exercises/2', data=json.dumps(exe))
+    result = response.json()
+    assert response.status_code == 200
     assert "name" in result
 
 

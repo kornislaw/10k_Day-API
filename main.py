@@ -59,6 +59,15 @@ def find_index_exercise(id: int):
             return i
 
 
+@app.put("/exercises/{id}")
+async def update_exercise(id: int, exe: Exercise):
+    for i, e in enumerate(stored_exercises):
+        if id == e['id']:
+            stored_exercises[i]['name'] = exe.name
+            stored_exercises[i]['description'] = exe.description
+            return stored_exercises[i]
+
+
 @app.delete("/exercises/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(id: int):
     idx = find_index_exercise(id)
