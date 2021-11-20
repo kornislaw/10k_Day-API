@@ -1,0 +1,20 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/exercises
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8000/exercise
+Content-Type: application/json
+
+{
+  "name": "Excercise number {{$randomInt}}",
+  "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}"
+}
+
