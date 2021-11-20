@@ -5,7 +5,7 @@
 
 It helps to track the amount of effort I put into my workouts to get the equivalent of 10 thousand steps made every day.
 
-###Example:
+### Example:
 I estimate that 10 push-ups is an equivalent of 400 steps. If I make 5x10 push-ups and 6k steps today, I will reach the 10k Day goal.
 
 Everybody can set up their own exercises with their own estimations.
