@@ -1,20 +1,30 @@
 # Test your FastAPI endpoints
 
+###  Get root
 GET http://127.0.0.1:8000/
 Accept: application/json
 
-###
-
+###  Get exercises
 GET http://127.0.0.1:8000/exercises
 Accept: application/json
 
-###
-
+### Post full exercise
 POST http://127.0.0.1:8000/exercise
 Content-Type: application/json
 
 {
-  "name": "Excercise number {{$randomInt}}",
+  "name": "Exercise number {{$randomInt}}",
   "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}"
 }
+
+### Post exercise with no description
+POST http://127.0.0.1:8000/exercise
+Content-Type: application/json
+
+{
+  "name": "Exercise number {{$randomInt}}"
+}
+
+### Get a single exercise
+GET http://127.0.0.1:8000/exercises/1
 
