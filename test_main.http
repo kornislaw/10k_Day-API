@@ -28,3 +28,12 @@ Content-Type: application/json
 ### Get a single exercise
 GET http://127.0.0.1:8000/exercises/1
 
+
+### Get a single exercise
+DELETE http://127.0.0.1:8000/exercises/1
+
+> {%
+client.test("Delete executed successfully", function() {
+  client.assert(response.status === 204, "Response status is not 204");
+});
+%}

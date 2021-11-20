@@ -53,6 +53,21 @@ async def post_exercise(exercise: Exercise):
     return exercise.dict()
 
 
+def find_index_exercise(id: int):
+    for i, exe in enumerate(stored_exercises):
+        if exe['id'] == id:
+            return i
+
+
+@app.delete("/exercises/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_post(id: int):
+    idx = find_index_exercise(id)
+    if idx is not None:
+        stored_exercises.pop(idx)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"ID {id} not found")
+
 # /exercises
 # /repeats {exercise_id}
 # /sequences

@@ -41,3 +41,15 @@ def test_post_exercise() -> None:
     result = response.json()
     assert response.status_code == 201
     assert "name" in result
+
+
+def test_delete_exercise() -> None:
+    """Delete an exercise by ID"""
+    response = client.delete("/exercises/1")
+    result = response.json()
+    assert response.status_code == 204
+    assert result == None
+
+
+
+
