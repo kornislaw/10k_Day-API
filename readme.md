@@ -19,6 +19,11 @@ Please note the example interface is entirely browser-based with no storage of p
 The intention of this project is to provide a backend for such interfaces.
 
 
+## Installation
+
+`poetry add fastapi`
+`poetry add psycopg[binary]`
+
 ## Troubleshooting
 
 * In case of issues with Poetry's cache at the moment it is best to just dump the whole cache from: `https://stackoverflow.com/questions/69326748/poetry-install-command-fails-whl-files-are-not-found#`
