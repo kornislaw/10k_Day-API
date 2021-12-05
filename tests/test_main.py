@@ -28,7 +28,7 @@ def test_exercises_crud() -> None:
 
     # RETRIEVE
     response = client.get(f"/exercises/{new_exe['id']}")
-    retrieved_exe = response.json()
+    retrieved_exe = response.json()['data']
     assert response.status_code == 200
     assert "name" in retrieved_exe
     assert "Exercise number " in retrieved_exe["name"]
@@ -39,7 +39,7 @@ def test_exercises_crud() -> None:
         "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}",
     }
     response = client.put(f"/exercises/{retrieved_exe['id']}", data=json.dumps(exe))
-    updated_exe = response.json()
+    updated_exe = response.json()['data']
     assert response.status_code == 200
     assert "name" in updated_exe
     assert "Updated exercise " in updated_exe["name"]
