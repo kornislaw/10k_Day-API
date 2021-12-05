@@ -1,7 +1,9 @@
 from typing import Optional
 
+import psycopg2
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 import psycopg
+from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -18,10 +20,20 @@ class Exercise(BaseModel):
 
 
 try:
-    conn = psycopg.connect(
-        "host=localhost dbname=10kday user=postgres password=postgres"
+    # this is for psycopg v3:
+    # conn = psycopg.connect(
+    #     "host=localhost dbname=10kday user=postgres password=postgres"
+    # )
+    # cursor = conn.cursor(row_factory=psycopg.rows.dict_row)
+
+    conn = psycopg2.connect(
+        host="localhost",
+        database="10kday",
+        user="postgres",
+        password="postgres",
+        cursor_factory=RealDictCursor,
     )
-    cursor = conn.cursor(row_factory=psycopg.rows.dict_row)
+    cursor = conn.cursor()
     print("Database connection was successful")
 except Exception as error:
     print("Connection to the DB has failed")
