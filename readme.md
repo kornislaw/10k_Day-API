@@ -26,5 +26,9 @@ The intention of this project is to provide a backend for such interfaces.
 
 ## Troubleshooting
 
-* In case of issues with Poetry's cache at the moment it is best to just dump the whole cache from: `https://stackoverflow.com/questions/69326748/poetry-install-command-fails-whl-files-are-not-found#`
+* Under Windows: in case of issues with Poetry's cache at the moment it is best to just dump the whole cache from: `https://stackoverflow.com/questions/69326748/poetry-install-command-fails-whl-files-are-not-found#`
+  * In my case it was about deleting the contents of `%HOMEPATH%\AppData\Local\pypoetry\Cache\artifacts\` 
+* Poetry in Windows breaks when self updated. Uninstalling and installing Poetry again:
+  * In PowerShell run: `(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python - --uninstall`
+  * Then reinstall: `(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python -`
 * 
