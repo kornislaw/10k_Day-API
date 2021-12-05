@@ -1,9 +1,14 @@
 from typing import Optional
 
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 import psycopg
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
+import models
+from database import engine, get_db
+
+models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
@@ -13,7 +18,9 @@ class Exercise(BaseModel):
 
 
 try:
-    conn = psycopg.connect("host=localhost dbname=10kday user=postgres password=postgres")
+    conn = psycopg.connect(
+        "host=localhost dbname=10kday user=postgres password=postgres"
+    )
     cursor = conn.cursor(row_factory=psycopg.rows.dict_row)
     print("Database connection was successful")
 except Exception as error:
@@ -31,6 +38,11 @@ async def root():
     return {"message": "Hello World"}
 
 
+@app.get("/sqlalchemy")
+def test_posts(db: Session = Depends(get_db)):
+    return {"status": "Success"}
+
+
 @app.get("/exercises")
 async def get_exercises():
     cursor.execute("""SELECT * FROM exercises ORDER BY id""")
@@ -42,15 +54,18 @@ async def get_exercises():
 async def get_exercise(id: int):
     exe = find_exercise(id)
     if not exe:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"ID {id} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"ID {id} not found"
+        )
     return exe
 
 
 @app.post("/exercise", status_code=status.HTTP_201_CREATED)
 async def post_exercise(exercise: Exercise):
-    cursor.execute("""INSERT INTO exercises (name, description) VALUES (%s, %s) RETURNING *""",
-                   (exercise.name, exercise.description))
+    cursor.execute(
+        """INSERT INTO exercises (name, description) VALUES (%s, %s) RETURNING *""",
+        (exercise.name, exercise.description),
+    )
     new_exe = cursor.fetchone()
     conn.commit()
     return new_exe
@@ -58,12 +73,20 @@ async def post_exercise(exercise: Exercise):
 
 @app.put("/exercises/{id}")
 async def update_exercise(id: int, exe: Exercise):
-    cursor.execute("""UPDATE exercises SET name=%s, description=%s WHERE id=%s RETURNING *""",
-                   (exe.name, exe.description, str(id),))
+    cursor.execute(
+        """UPDATE exercises SET name=%s, description=%s WHERE id=%s RETURNING *""",
+        (
+            exe.name,
+            exe.description,
+            str(id),
+        ),
+    )
     updated_exe = cursor.fetchone()
     if updated_exe is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f'Exercise ID {id} does not exist')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Exercise ID {id} does not exist",
+        )
     conn.commit()
     return updated_exe
 
@@ -73,10 +96,13 @@ async def delete_post(id: int):
     cursor.execute("""DELETE FROM exercises WHERE id=%s RETURNING *""", (id,))
     deleted_exe = cursor.fetchone()
     if deleted_exe is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f'Exercise ID {id} does not exist')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Exercise ID {id} does not exist",
+        )
     conn.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 # /exercises
 # /repeats {exercise_id}

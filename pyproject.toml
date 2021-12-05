@@ -11,6 +11,8 @@ pytest = "^6.2.5"
 requests = "^2.26.0"
 uvicorn = "^0.15.0"
 psycopg = {extras = ["binary"], version = "^3.0.4"}
+SQLAlchemy = "^1.4.27"
+black = "^21.11b1"
 
 [tool.poetry.dev-dependencies]
 
