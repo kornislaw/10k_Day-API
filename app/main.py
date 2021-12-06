@@ -47,8 +47,8 @@ async def root():
 
 @app.get("/exercises")
 async def get_exercises(db: Session = Depends(get_db)):
-    items = db.query(models.Exercise).all()
-    return {"data": items}
+    execs = db.query(models.Exercise).all()
+    return execs
 
 
 @app.get("/exercises/{id}")
@@ -59,7 +59,7 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"ID {id} not found"
         )
-    return {"data": exe}
+    return exe
 
 
 @app.post("/exercise", status_code=status.HTTP_201_CREATED)
@@ -82,7 +82,7 @@ async def update_exercise(id: int, exe: schemas.Exercise, db: Session = Depends(
         )
     up_exe_query.update(exe.dict(), synchronize_session=False)
     db.commit()
-    return {'data': up_exe_query.first()}
+    return up_exe_query.first()
 
 
 @app.delete("/exercises/{id}", status_code=status.HTTP_204_NO_CONTENT)
