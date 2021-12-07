@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 import psycopg2
 from fastapi import FastAPI, Response, status, HTTPException, Depends
@@ -45,13 +45,13 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/exercises")
+@app.get("/exercises", response_model=List[schemas.Exercise])
 async def get_exercises(db: Session = Depends(get_db)):
     execs = db.query(models.Exercise).all()
     return execs
 
 
-@app.get("/exercises/{id}")
+@app.get("/exercises/{id}", response_model=schemas.Exercise)
 async def get_exercise(id: int, db: Session = Depends(get_db)):
     # exe = find_exercise(id)
     exe = db.query(models.Exercise).filter(models.Exercise.id == id).first()
@@ -62,8 +62,8 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
     return exe
 
 
-@app.post("/exercise", status_code=status.HTTP_201_CREATED)
-async def post_exercise(exercise: schemas.Exercise, db: Session = Depends(get_db)):
+@app.post("/exercise", status_code=status.HTTP_201_CREATED, response_model=schemas.Exercise)
+async def create_exercise(exercise: schemas.ExerciseCreate, db: Session = Depends(get_db)):
     new_exe = models.Exercise(**exercise.dict())
     db.add(new_exe)
     db.commit()
@@ -71,8 +71,8 @@ async def post_exercise(exercise: schemas.Exercise, db: Session = Depends(get_db
     return new_exe
 
 
-@app.put("/exercises/{id}")
-async def update_exercise(id: int, exe: schemas.Exercise, db: Session = Depends(get_db)):
+@app.put("/exercises/{id}", response_model=schemas.Exercise)
+async def update_exercise(id: int, exe: schemas.ExerciseCreate, db: Session = Depends(get_db)):
     up_exe_query = db.query(models.Exercise).filter(models.Exercise.id == id)
     up_exe = up_exe_query.first()
     if up_exe is None:
