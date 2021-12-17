@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, TIMESTAMP, text
-from sqlalchemy.sql import func
-from database import Base
+from sqlalchemy import Column, Integer, String, TIMESTAMP, text
+from .database import Base
 
 
 class Exercise(Base):
@@ -23,3 +22,4 @@ class User(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
+
