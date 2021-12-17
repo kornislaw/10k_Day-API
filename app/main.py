@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 
 import models, schemas
 from database import engine, get_db
+import utils
+
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -113,6 +115,10 @@ async def get_users(id: int, db: Session = Depends(get_db)):
 
 @app.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+
+    # hash the password - user.password
+    hashed_password = utils.hash(user.password)
+    user.password = hashed_password
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()
