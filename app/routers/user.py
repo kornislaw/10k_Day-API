@@ -4,16 +4,16 @@ from sqlalchemy.orm import Session
 from .. import models, schemas, utils
 from ..database import get_db
 
-router = APIRouter()
+router = APIRouter(prefix='/users', tags=['Users'])
 
 
-@router.get('/users', status_code=status.HTTP_200_OK, response_model=List[schemas.User])
+@router.get('/', status_code=status.HTTP_200_OK, response_model=List[schemas.User])
 async def get_users(db: Session = Depends(get_db)):
     users = db.query(models.User).all()
     return users
 
 
-@router.get('/users/{id}', status_code=status.HTTP_200_OK, response_model=schemas.User)
+@router.get('/{id}', status_code=status.HTTP_200_OK, response_model=schemas.User)
 async def get_users(id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
@@ -21,7 +21,7 @@ async def get_users(id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     # hash the password - user.password
@@ -34,7 +34,7 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.put('/users/{id}', response_model=schemas.User)
+@router.put('/{id}', response_model=schemas.User)
 async def update_user(id: int, user: schemas.UserCreate, db: Session = Depends(get_db)):
     update_user_query = db.query(models.User).filter(models.User.id == id)
     user_to_update = update_user_query.first()
@@ -45,7 +45,7 @@ async def update_user(id: int, user: schemas.UserCreate, db: Session = Depends(g
     return update_user_query.first()
 
 
-@router.delete('/users/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(id: int, db: Session = Depends(get_db)):
     user_query = db.query(models.User).filter(models.User.id == id)
 

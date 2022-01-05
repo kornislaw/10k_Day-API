@@ -9,7 +9,7 @@ GET http://127.0.0.1:8000/exercises
 Accept: application/json
 
 ### Post full exercise
-POST http://127.0.0.1:8000/exercise
+POST http://127.0.0.1:8000/exercises
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Post exercise with no description
-POST http://127.0.0.1:8000/exercise
+POST http://127.0.0.1:8000/exercises
 Content-Type: application/json
 
 {

@@ -31,7 +31,7 @@ def test_exercises_crud() -> None:
         "name": "Exercise number {{$randomInt}}",
         "description": "Description: {{$randomCatchPhraseAdjective}} {{$randomCatchPhrase}}",
     }
-    response = client.post("/exercise", data=json.dumps(exe))
+    response = client.post("/exercises", data=json.dumps(exe))
     new_exe = response.json()
     assert response.status_code == 201
     assert "name" in new_exe

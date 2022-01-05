@@ -4,10 +4,11 @@ from psycopg2.extras import RealDictCursor
 from . import models
 from .database import engine
 
-from .routers import user, exercise
+from .routers import user, exercise, auth
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+# app.router.redirect_slashes = False
 
 
 try:
@@ -33,6 +34,8 @@ except Exception as error:
 
 app.include_router(user.router)
 app.include_router(exercise.router)
+app.include_router(auth.router)
+
 
 
 @app.get("/")
