@@ -1,7 +1,7 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from typing import List
 from sqlalchemy.orm import Session
-from .. import models, schemas
+from .. import models, schemas, oath2
 from ..database import get_db
 
 router = APIRouter(prefix='/exercises', tags=['Exercises'])
@@ -25,7 +25,9 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Exercise)
-async def create_exercise(exercise: schemas.ExerciseCreate, db: Session = Depends(get_db)):
+async def create_exercise(
+        exercise: schemas.ExerciseCreate,
+        db: Session = Depends(get_db)):
     new_exe = models.Exercise(**exercise.dict())
     db.add(new_exe)
     db.commit()
