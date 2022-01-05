@@ -25,15 +25,14 @@ def verify_access_token(token: str, creds_exception):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
-
         id: str = payload.get("user_id")
-
         if id is None:
             raise creds_exception
         token_data = schemas.TokenData(id=id)
-        return token_data
     except JWTError:
         raise creds_exception
+
+    return token_data
 
 
 def get_current_user(token: str = Depends(oath2_scheme)):

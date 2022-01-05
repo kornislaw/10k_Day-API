@@ -27,7 +27,10 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Exercise)
 async def create_exercise(
         exercise: schemas.ExerciseCreate,
-        db: Session = Depends(get_db)):
+        db: Session = Depends(get_db),
+        user_id: int = Depends(oath2.get_current_user)
+    ):
+    print(user_id)
     new_exe = models.Exercise(**exercise.dict())
     db.add(new_exe)
     db.commit()
